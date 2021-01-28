@@ -1,0 +1,67 @@
+BITS 32
+
+extern printf
+extern scanf
+
+extern printf
+
+section .data
+	fmt: db "%d\n",0
+	msg1 db 'Enter a number',10,0
+	len1 equ $ - msg1
+	out1: db 'The given number is prime',10,0
+	out2: db 'The given number is not prime',10,0
+
+section .text 
+
+	global main
+	
+	main:
+
+	push ebp
+	mov ebp, esp
+	sub esp, 0x10
+
+	push msg1
+	call printf
+
+	lea ecx, [ebp-0x4]
+	push ecx
+	push fmt
+	call scanf
+
+	mov eax,dword [ebp-0x4]
+	mov ebx,2
+	mov ecx,0
+
+	L1:
+
+        cmp eax,ebx
+        je C1
+    
+        xor edx,edx
+	div ebx
+	
+	cmp edx,0
+	je C2
+	inc ebx
+	
+	mov eax,dword [ebp-0x4]
+	mov edx,0
+	
+	jmp L1
+
+	end:
+
+    	C1:
+    	push out1
+    	call printf
+	jmp exit
+        
+    	C2:
+    	push out2
+    	call printf
+
+	exit:
+	leave
+	ret
